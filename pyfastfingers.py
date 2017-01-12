@@ -294,8 +294,9 @@ if __name__ == '__main__':
                 user_input = raw_input('Enter word, or hit enter to finish: ')
             if len(ff_input_proc) == 0:
                 sys.exit('No words entered.')
-                PyFastFingers = FastFingers(
-                    ' '.join(map(lambda word_line: regex.sub('', word_line), ff_input_proc)))
+            ff_input_proc = ' '.join(
+                    map(lambda word_line: regex.sub('', word_line), ff_input_proc))
+            PyFastFingers = FastFingers(ff_input_proc) 
 
         # Complete sentence entry mode
         elif True in map(lambda kw: kw in interactive_mode_type, ['s', 'S']):
@@ -303,6 +304,7 @@ if __name__ == '__main__':
                 'Enter your desired sentence. A-Z, 0-9 only: ')
             ff_input_proc = ' '.join(
                 map(lambda word: regex.sub('', word).strip(), ff_input_proc.split(' ')))
+            print ff_input_proc
             PyFastFingers = FastFingers(ff_input_proc)
 
         # No mode specified interactively
@@ -315,17 +317,13 @@ if __name__ == '__main__':
         try:
             input_file = open(sys.argv[1], 'r')
         except:
-            pass
-        ff_input_proc = input_file.readlines()
+            print "Error reading file."
+        ff_input_proc = input_file.read()
         PyFastFingers = None
-        if len(ff_input_proc) == 1:
-            try:
-                PyFastFingers = FastFingers(regex.sub('', ff_input_proc[0]))
-            except:
-                pass
-        else:
-            try:
-                PyFastFingers = FastFingers(
-                    ' '.join(map(lambda word_line: regex.sub('', word_line), ff_input_proc)))
-            except:
-                pass
+        try:
+            print ff_input_proc
+            PyFastFingers = FastFingers(regex.sub('', ff_input_proc))
+        except Exception, e:
+            print "Error initializing PFF."
+            print str(e)
+
